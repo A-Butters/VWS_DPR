@@ -130,7 +130,7 @@ prp <- prp %>% # For panel
 # Check qa combined ratings
 table(prp$qa_combined) 
 
-# Create variable for uncertinaty and numeric variable for disciplinary fit
+# Create variable for uncertainty and numeric variable for disciplinary fit
 dpr <- dpr %>%
     #Adjust values of people who put highest/lowest confidence in wrong order
   mutate(conf_highest2 = conf_highest, #Use duplicates for comparisons to avoid error after conf_highest changes
@@ -2121,6 +2121,33 @@ expect2 %>%
         axis.text = element_text(size = 14)) 
 ```
 
+## Alternative plotting for expectations (figure3) (used in journal article) 
+```{r}
+## Pivot expect2 longer and calculate percentages of responses to each item
+long_expect <- expect2 %>%
+  dplyr::select(suitable:similar) %>%
+  pivot_longer(cols = everything()) %>%
+  mutate(value = factor(value, levels = c(1,2,3,4,5,6,7)),
+         name = factor(name, levels = c("adventurous", "similar", "suitable", "app_reviewer", "fair", "best"))) %>%
+  group_by(name,value) %>%
+  drop_na() %>%
+    summarise(count = n()) %>%
+    mutate(percentage = round((count/sum(count) * 100), 2))
+
+# Load RColorBrewer for color palette
+library(RColorBrewer)
+# Plot expectations
+ggplot(long_expect, aes(x = percentage, y = name)) +
+  geom_col(aes(fill = value), width = 0.6) +
+  scale_y_discrete(labels = c( "I expect this process to select more adventurous\nproposals than conventional panel review", "I expect this process to select a similar\nset of proposals to panel review","This process is suitable to review my proposal", "This process will identify appropriate reviewers", "My proposal will receive a fair evaluation\nunder this process", "Overall I trust this process to select\nthe best research to fund")) +
+  scale_fill_brewer(palette = "RdBu", labels = c("Strongly disagree", "Disagree", "Slightly disagree", "Neither agree\nor disagree", "Slightly agree", "Agree","Strongly agree"),
+                    name = NULL, guide = "legend" ) +
+  labs(y = NULL, x = "Percentage of applicants") +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  theme(axis.text.y = element_text(size = 10), 
+        legend.text = element_text(size = 10), legend.position = "right")
+```
+
 ```{r}
 ## Join expectation and feedback variables
 pre_post <- left_join(expect2, feedback_rank2, by = "apl_id")
@@ -2177,3 +2204,4 @@ summary(feedback_rank2$future_dpr)
 
 
 ```
+
