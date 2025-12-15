@@ -1,6 +1,6 @@
 # VWS_DPR
 
-This is a repository for outputs from an experiment in distributed peer review (DPR) conducted by the Volkswagen Foundation. It contains materials for the working paper:
+This is a repository for outputs from an experiment using distributed peer review (DPR) for funding evaluation at the Volkswagen Foundation. It contains materials for the working paper:
 
 Butters, A., & Benson Marshall, M., Pinfield, S., Stafford, T., Bondarenko, A., Neubauer, B., Nuske, R., Schwidlinski, P., Denecke, H. (2025). 
 Applicants as reviewers: Evaluating the risks, benefits, and potential of Distributed Peer Review for grant funding allocations. 
